@@ -31,6 +31,7 @@ if (!NATS_SERVER || !NATS_TOPIC || !FORWARD_HTTP_URL) {
 
             // Forward the message to the HTTP endpoint
             try {
+                console.log(`Forwarding to: ${FORWARD_HTTP_URL}`);
                 const response = await axios.post(FORWARD_HTTP_URL, {
                     message: message,
                 });

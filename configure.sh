@@ -32,6 +32,11 @@ if [ -z "${NATS_SERVER}" ] ; then
   exit 1
 fi
 
+if [ -z "${NATS_TOPIC}" ] ; then
+  echo "ENV: NATS_TOPIC is missing!"
+  exit 1
+fi
+
 if [ -z "${DISCORD_WEBHOOK_URL}" ] ; then
   echo "ENV: DISCORD_WEBHOOK_URL is missing!"
   exit 1
@@ -52,6 +57,7 @@ replace_placeholders() {
   sed -i "s|%DISCORD_WEBHOOK_URL%|${DISCORD_WEBHOOK_URL}|g" "$file"
   sed -i "s|%FORWARD_HTTP_URL%|${FORWARD_HTTP_URL}|g" "$file"
   sed -i "s|%NATS_SERVER%|${NATS_SERVER}|g" "$file"
+  sed -i "s|%NATS_TOPIC%|${NATS_TOPIC}|g" "$file"
 }
 
 cd scripts/
