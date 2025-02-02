@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
 
 #get highest tag number
 VERSION=`git describe --abbrev=0 --tags`
