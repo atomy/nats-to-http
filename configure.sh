@@ -21,7 +21,7 @@ declare -A env_var_placeholders=(
 
 # Validate environment variables
 for var in "${!env_var_placeholders[@]}"; do
-  if [ -z "${!var}" ]; then
+  if [ -z "${!var:-}" ]; then
     echo "ENV: $var is missing!"
     exit 1
   fi
@@ -40,7 +40,7 @@ replace_placeholders() {
 
   for var in "${!env_var_placeholders[@]}"; do
     local placeholder="${env_var_placeholders[$var]}"
-    sed -i "s|$placeholder|${!var}|g" "$file"
+    sed -i "s|$placeholder|${!var:-}|g" "$file"
   done
 }
 
@@ -50,7 +50,7 @@ cd scripts/
 for dist_file in *.dist; do
   # Skip if no files match the pattern
   if [ ! -e "$dist_file" ]; then
-    echo "No .dist files found in ${pwd}"
+    echo "No .dist files found in $(pwd)"
     exit 0
   fi
 
@@ -88,7 +88,7 @@ fi
 if [ -e "../Jenkinsfile.dist" ]; then
   cp ../Jenkinsfile.dist ../Jenkinsfile
 
-  replace_placeholders "../Jenkinsfile.dist"
+  replace_placeholders "../Jenkinsfile"
 
   echo "Configured Jenkinsfile.dist -> Jenkinsfile"
 fi
