@@ -18,7 +18,7 @@ pipeline {
         stage('Build') {
             steps {
                 timeout(unit: 'SECONDS', time: 300) {
-                    withCredentials([string(credentialsId: 'ecr-prefix', variable: 'ECR_PREFIX'),
+                    withCredentials([string(credentialsId: 'ecr-repo', variable: 'ECR_REPO'),
                         string(credentialsId: 'discord-webhook-release-url', variable: 'DISCORD_WEBHOOK_URL'),
                         string(credentialsId: 'nats-server', variable: 'NATS_SERVER'),
                         string(credentialsId: 'nats-to-http-nats-topic', variable: 'NATS_TOPIC'),
