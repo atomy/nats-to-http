@@ -2,4 +2,26 @@
 
 set -e
 
-docker push %ECR_REPO%/atomy/nats-to-http:latest
+# Variables (adjust these as needed)
+ECR_REPO="${ECR_REPO:-%ECR_REPO%}"
+IMAGE_NAME="atomy/nats-to-http:latest"
+FULL_IMAGE_NAME="${ECR_REPO}/${IMAGE_NAME}"
+
+# Ensure ECR_REPO is set
+if [[ -z "$ECR_REPO" ]]; then
+    echo "Error: ECR_REPO is not set."
+    exit 1
+fi
+
+# Use Buildx for pushing the image (if required)
+echo "Preparing to push image: ${FULL_IMAGE_NAME}"
+docker buildx create --name mybuilder --use || true
+docker buildx inspect --bootstrap
+
+# Push the image using Docker Buildx
+docker push "${FULL_IMAGE_NAME}"
+
+# Clean up Buildx instance (optional)
+docker buildx rm mybuilder || true
+
+echo "Image pushed successfully: ${FULL_IMAGE_NAME}"
