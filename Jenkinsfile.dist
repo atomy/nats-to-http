@@ -11,6 +11,7 @@ pipeline {
         APP_NAME = 'nats-to-http'
         JENKINS_SECRET_DEPLOYHOST_NAME = 'ignored'
         GITHUB_PROJECT_URL_SSH = 'ignored'
+        JENKINS_APP_NAME = 'ignored'
     }
 
     stages {
