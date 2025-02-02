@@ -82,8 +82,10 @@ pipeline {
 
     post {
         always {
-            timeout(unit: 'SECONDS', time: 60) {
-                sh 'docker-compose down'
+            withCredentials([string(credentialsId: 'discord-webhook-release-url', variable: 'DISCORD_WEBHOOK_URL')]) {
+                echo 'Sending release-notification...'
+                sh './scripts/notification.sh ERROR'
+                echo 'Sending release-notification...DONE'
             }
         }
     }
