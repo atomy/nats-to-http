@@ -68,4 +68,3 @@ test.js
 /scripts/notification.sh
 /scripts/deploy.sh
 jenkins-config.xml
-Jenkinsfile

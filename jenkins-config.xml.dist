@@ -32,7 +32,7 @@
             <configVersion>2</configVersion>
             <userRemoteConfigs>
                 <hudson.plugins.git.UserRemoteConfig>
-                    <url>%JENKINS_SECRET_DEPLOYHOST_NAME%</url>
+                    <url>%GITHUB_PROJECT_URL_SSH%</url>
                     <credentialsId>github-iogames-jenkins</credentialsId>
                 </hudson.plugins.git.UserRemoteConfig>
             </userRemoteConfigs>
