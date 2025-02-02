@@ -24,7 +24,7 @@ pipeline {
                         string(credentialsId: 'nats-to-http-nats-topic', variable: 'NATS_TOPIC'),
                         string(credentialsId: 'nats-to-http-deploy-host', variable: 'DEPLOY_FULLPATH'),
                         string(credentialsId: 'nats-to-http-forward-url', variable: 'FORWARD_HTTP_URL'),
-                        string(credentialsId: 'docker-deploy-login', variable: 'DEPLOY_LOGIN'),]) {
+                        string(credentialsId: 'docker-deploy-login', variable: 'SSH_DEPLOY_HOST'),]) {
                             echo 'Configuring...'
                             sh './configure.sh'
                             echo 'Configuring...DONE'
