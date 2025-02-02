@@ -17,5 +17,6 @@ docker buildx build \
     --file scripts/Dockerfile \
     --tag atomy/nats-to-http:latest \
     --tag "%ECR_REPO%/atomy/nats-to-http:latest" \
-    .
+    --load .
+
 echo "Building %ECR_REPO%/atomy/nats-to-http:latest... DONE"

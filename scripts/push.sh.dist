@@ -6,7 +6,6 @@ set -e
 ECR_REPO="${ECR_REPO:-%ECR_REPO%}"
 IMAGE_NAME="atomy/nats-to-http:latest"
 FULL_IMAGE_NAME="${ECR_REPO}/${IMAGE_NAME}"
-BUILDER_NAME="mybuilder"
 
 # Ensure ECR_REPO is set
 if [[ -z "$ECR_REPO" ]]; then
@@ -14,13 +13,10 @@ if [[ -z "$ECR_REPO" ]]; then
     exit 1
 fi
 
-# Check if the Buildx instance already exists
-if docker buildx inspect "$BUILDER_NAME" >/dev/null 2>&1; then
-    echo "Using existing Buildx instance: $BUILDER_NAME"
-else
-    echo "Creating Buildx instance: $BUILDER_NAME"
-    docker buildx create --name "$BUILDER_NAME" --use
-    docker buildx inspect --bootstrap
+# Check if the image exists locally
+if ! docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "${FULL_IMAGE_NAME}"; then
+    echo "Error: Image ${FULL_IMAGE_NAME} not found locally. Ensure the build step has completed successfully."
+    exit 1
 fi
 
 # Push the image
