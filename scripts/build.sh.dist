@@ -1,7 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-docker build -f scripts/Dockerfile -t atomy/discord-bot_manager:latest .
+# Validate required environment variables
+if [ -z "${ECR_REPO:-}" ]; then
+    echo "ENV: ECR_REPO is missing!"
+    exit 1
+fi
 
-docker tag atomy/discord-bot_manager:latest %ECR_REPO%/atomy/discord-bot_manager:latest
+# Create and use a new Docker Buildx builder (if not already created)
+if ! docker buildx inspect mybuilder > /dev/null 2>&1; then
+    docker buildx create --name mybuilder --use
+fi
+
+# Enable Buildx experimental features if needed
+docker buildx inspect --bootstrap
+
+# Build and push the Docker image using Buildx
+docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --file scripts/Dockerfile \
+    --tag atomy/nats-to-http:latest \
+    --tag "${ECR_REPO}/atomy/nats-to-http:latest" \
+    --push .
+

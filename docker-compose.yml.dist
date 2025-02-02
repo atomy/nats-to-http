@@ -1,6 +1,6 @@
 services:
   discord-bot-manager:
-    image: %ECR_REPO%/atomy/discord-bot_manager:latest
+    image: %ECR_REPO%/atomy/nats-to-http:latest
     environment:
       - FORWARD_HTTP_URL=%FORWARD_HTTP_URL%
       - NATS_SERVER=%NATS_SERVER%

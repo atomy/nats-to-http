@@ -4,7 +4,7 @@ set -e
 
 # Configuration
 DISCORD_WEBHOOK_URL=%DISCORD_WEBHOOK_URL%
-APP_NAME=<app-name>
+APP_NAME=%APP_NAME%
 CHANGES=$(cat changes)
 CURRENT_VERSION=<current-version>
 NEW_VERSION=<new-version>
