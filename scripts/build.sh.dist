@@ -10,6 +10,7 @@ fi
 # Enable Buildx experimental features if needed
 docker buildx inspect --bootstrap
 
+echo "Building %ECR_REPO%/atomy/nats-to-http:latest..."
 # Build and push the Docker image using Buildx
 docker buildx build \
     --platform linux/amd64,linux/arm64 \
@@ -17,3 +18,4 @@ docker buildx build \
     --tag atomy/nats-to-http:latest \
     --tag "%ECR_REPO%/atomy/nats-to-http:latest" \
     .
+echo "Building %ECR_REPO%/atomy/nats-to-http:latest... DONE"
