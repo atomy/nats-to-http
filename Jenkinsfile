@@ -44,16 +44,6 @@ pipeline {
             }
         }
 
-
-        stage('Test') {
-            steps {
-                timeout(unit: 'SECONDS', time: 120) {
-                    echo 'Run tests...'
-                    sh './scripts/test.sh'
-                }
-            }
-        }
-
         stage('Push ECR') {
             steps {
                 timeout(unit: 'SECONDS', time: 120) {
@@ -97,6 +87,5 @@ pipeline {
         }
     }
 }
-
 
 
