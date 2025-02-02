@@ -1,0 +1,53 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.41">
+    <actions>
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.1"/>
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.1">
+            <jobProperties>
+                <string>org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty</string>
+            </jobProperties>
+            <triggers/>
+            <parameters/>
+            <options/>
+        </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+    </actions>
+    <description></description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.34.1">
+            <projectUrl>%GITHUB_PROJECT_URL%</projectUrl>
+            <displayName></displayName>
+        </com.coravy.hudson.plugins.github.GithubProjectProperty>
+        <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+            <triggers>
+                <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.34.1">
+                    <spec></spec>
+                </com.cloudbees.jenkins.GitHubPushTrigger>
+            </triggers>
+        </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+        <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty/>
+    </properties>
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.94">
+        <scm class="hudson.plugins.git.GitSCM" plugin="git@4.8.2">
+            <configVersion>2</configVersion>
+            <userRemoteConfigs>
+                <hudson.plugins.git.UserRemoteConfig>
+                    <url>%JENKINS_SECRET_DEPLOYHOST_NAME%</url>
+                    <credentialsId>github-iogames-jenkins</credentialsId>
+                </hudson.plugins.git.UserRemoteConfig>
+            </userRemoteConfigs>
+            <branches>
+                <hudson.plugins.git.BranchSpec>
+                    <name>*/main</name>
+                </hudson.plugins.git.BranchSpec>
+            </branches>
+            <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+            <submoduleCfg class="empty-list"/>
+            <extensions/>
+        </scm>
+        <scriptPath>Jenkinsfile</scriptPath>
+        <lightweight>true</lightweight>
+    </definition>
+    <triggers/>
+    <disabled>false</disabled>
+</flow-definition>

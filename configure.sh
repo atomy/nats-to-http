@@ -1,63 +1,47 @@
 #!/usr/bin/env bash
 
-set -e
+# Enable strict error handling
+set -euo pipefail
 
-if [ -z "${ECR_REPO}" ] ; then
-  echo "ENV: ECR_REPO is missing!"
-  exit 1
-fi
+# Define an associative array with environment variable names and their placeholders
+declare -A env_var_placeholders=(
+  ["ECR_REPO"]="%ECR_REPO%"
+  ["DEPLOY_FULLPATH"]="%DEPLOY_FULLPATH%"
+  ["SSH_DEPLOY_HOST"]="%SSH_DEPLOY_HOST%"
+  ["APP_NAME"]="%APP_NAME%"
+  ["DISCORD_WEBHOOK_URL"]="%DISCORD_WEBHOOK_URL%"
+  ["FORWARD_HTTP_URL"]="%FORWARD_HTTP_URL%"
+  ["NATS_SERVER"]="%NATS_SERVER%"
+  ["NATS_TOPIC"]="%NATS_TOPIC%"
+  ["GITHUB_PROJECT_URL"]="%GITHUB_PROJECT_URL%"
+  ["GITHUB_PROJECT_URL_SSH"]="%GITHUB_PROJECT_URL_SSH%"
+  ["JENKINS_APP_NAME"]="%JENKINS_APP_NAME%"
+  ["JENKINS_SECRET_DEPLOYHOST_NAME"]="%JENKINS_SECRET_DEPLOYHOST_NAME%"
+)
 
-if [ -z "${APP_NAME}" ] ; then
-  echo "ENV: APP_NAME is missing!"
-  exit 1
-fi
-
-if [ -z "${SSH_DEPLOY_HOST}" ] ; then
-  echo "ENV: SSH_DEPLOY_HOST is missing!"
-  exit 1
-fi
-
-if [ -z "${DEPLOY_FULLPATH}" ] ; then
-  echo "ENV: DEPLOY_FULLPATH is missing!"
-  exit 1
-fi
-
-if [ -z "${FORWARD_HTTP_URL}" ] ; then
-  echo "ENV: FORWARD_HTTP_URL is missing!"
-  exit 1
-fi
-
-if [ -z "${NATS_SERVER}" ] ; then
-  echo "ENV: NATS_SERVER is missing!"
-  exit 1
-fi
-
-if [ -z "${NATS_TOPIC}" ] ; then
-  echo "ENV: NATS_TOPIC is missing!"
-  exit 1
-fi
-
-if [ -z "${DISCORD_WEBHOOK_URL}" ] ; then
-  echo "ENV: DISCORD_WEBHOOK_URL is missing!"
-  exit 1
-fi
+# Validate environment variables
+for var in "${!env_var_placeholders[@]}"; do
+  if [ -z "${!var}" ]; then
+    echo "ENV: $var is missing!"
+    exit 1
+  fi
+done
 
 rm -f scripts/build.sh
 rm -f scripts/push.sh
 rm -f scripts/deploy.sh
 rm -f docker-compose.yml
+rm -f Jenkinsfile
+rm -f jenkins-config.xml
 
+# Function to replace placeholders with actual values
 replace_placeholders() {
   local file=$1
 
-  sed -i "s|%ECR_REPO%|${ECR_REPO}|g" "$file"
-  sed -i "s|%DEPLOY_FULLPATH%|${DEPLOY_FULLPATH}|g" "$file"
-  sed -i "s|%SSH_DEPLOY_HOST%|${SSH_DEPLOY_HOST}|g" "$file"
-  sed -i "s|%APP_NAME%|${APP_NAME}|g" "$file"
-  sed -i "s|%DISCORD_WEBHOOK_URL%|${DISCORD_WEBHOOK_URL}|g" "$file"
-  sed -i "s|%FORWARD_HTTP_URL%|${FORWARD_HTTP_URL}|g" "$file"
-  sed -i "s|%NATS_SERVER%|${NATS_SERVER}|g" "$file"
-  sed -i "s|%NATS_TOPIC%|${NATS_TOPIC}|g" "$file"
+  for var in "${!env_var_placeholders[@]}"; do
+    local placeholder="${env_var_placeholders[$var]}"
+    sed -i "s|$placeholder|${!var}|g" "$file"
+  done
 }
 
 cd scripts/
@@ -89,4 +73,22 @@ if [ -e "../docker-compose.yml.dist" ]; then
   replace_placeholders "../docker-compose.yml"
 
   echo "Configured docker-compose.yml.dist -> docker-compose.yml"
+fi
+
+# Process jenkins-config.xml.dist if it exists in the same folder as this script
+if [ -e "../jenkins-config.xml.dist" ]; then
+  cp ../jenkins-config.xml.dist ../jenkins-config.xml
+
+  replace_placeholders "../jenkins-config.xml"
+
+  echo "Configured jenkins-config.xml.dist -> jenkins-config.xml"
+fi
+
+# Process Jenkinsfile.dist if it exists in the same folder as this script
+if [ -e "../Jenkinsfile.dist" ]; then
+  cp ../Jenkinsfile.dist ../Jenkinsfile
+
+  replace_placeholders "../Jenkinsfile.dist"
+
+  echo "Configured Jenkinsfile.dist -> Jenkinsfile"
 fi
