@@ -2,10 +2,11 @@
 
 set -e
 
-# Variables (adjust these as needed)
+# Variables
 ECR_REPO="${ECR_REPO:-%ECR_REPO%}"
 IMAGE_NAME="atomy/nats-to-http:latest"
 FULL_IMAGE_NAME="${ECR_REPO}/${IMAGE_NAME}"
+BUILDER_NAME="mybuilder"
 
 # Ensure ECR_REPO is set
 if [[ -z "$ECR_REPO" ]]; then
@@ -13,15 +14,17 @@ if [[ -z "$ECR_REPO" ]]; then
     exit 1
 fi
 
-# Use Buildx for pushing the image (if required)
+# Check if the Buildx instance already exists
+if docker buildx inspect "$BUILDER_NAME" >/dev/null 2>&1; then
+    echo "Using existing Buildx instance: $BUILDER_NAME"
+else
+    echo "Creating Buildx instance: $BUILDER_NAME"
+    docker buildx create --name "$BUILDER_NAME" --use
+    docker buildx inspect --bootstrap
+fi
+
+# Push the image
 echo "Preparing to push image: ${FULL_IMAGE_NAME}"
-docker buildx create --name mybuilder --use || true
-docker buildx inspect --bootstrap
-
-# Push the image using Docker Buildx
 docker push "${FULL_IMAGE_NAME}"
-
-# Clean up Buildx instance (optional)
-docker buildx rm mybuilder || true
 
 echo "Image pushed successfully: ${FULL_IMAGE_NAME}"
