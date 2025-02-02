@@ -27,6 +27,7 @@ for var in "${!env_var_placeholders[@]}"; do
   fi
 done
 
+rm -f scripts/auto-tag.sh
 rm -f scripts/build.sh
 rm -f scripts/push.sh
 rm -f scripts/deploy.sh

@@ -70,3 +70,4 @@ test.js
 jenkins-config.xml
 /current_version
 /changes
+/scripts/auto-tag.sh
