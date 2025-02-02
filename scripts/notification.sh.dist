@@ -2,13 +2,24 @@
 
 set -e
 
+# Configuration
 DISCORD_WEBHOOK_URL=%DISCORD_WEBHOOK_URL%
 APP_NAME=<app-name>
-CHANGES=`cat changes`
+CHANGES=$(cat changes)
 CURRENT_VERSION=<current-version>
 NEW_VERSION=<new-version>
 
+# Optional parameter to handle errors
+if [[ "$1" == "ERROR" ]]; then
+    curl -X POST \
+      -H "Content-Type: application/json" \
+      -d "{\"username\": \"Jenkins-Release\", \"content\": \"[`hostname`] :x: **ERROR** during release of **$APP_NAME** from version **$CURRENT_VERSION** to **$NEW_VERSION**.\"}" \
+      ${DISCORD_WEBHOOK_URL}
+    exit 1
+fi
+
+# Regular release notification
 curl -X POST \
   -H "Content-Type: application/json" \
-  -d "{\"username\": \"Jenkins-Release\", \"content\": \"[`hostname`] Released **<app-name>** -- **<current-version>** -> **<new-version>**\n${CHANGES}\"}" \
+  -d "{\"username\": \"Jenkins-Release\", \"content\": \"[`hostname`] Released **$APP_NAME** -- **$CURRENT_VERSION** -> **$NEW_VERSION**\n${CHANGES}\"}" \
   ${DISCORD_WEBHOOK_URL}

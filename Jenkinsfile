@@ -69,6 +69,12 @@ pipeline {
                     sshagent(credentials : ['deploy-key-docker02']) {
                         sh './scripts/deploy.sh'
                     }
+
+                    withCredentials([string(credentialsId: 'discord-webhook-release-url', variable: 'DISCORD_WEBHOOK_URL')]) {
+                        echo 'Sending release-notification...'
+                        sh './scripts/notification.sh'
+                        echo 'Sending release-notification...DONE'
+                    }
                 }
             }
         }
