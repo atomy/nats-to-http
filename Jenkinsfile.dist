@@ -9,6 +9,7 @@ pipeline {
 
     environment {
         APP_NAME = 'nats-to-http'
+        JENKINS_SECRET_DEPLOYHOST_NAME = 'ignored'
     }
 
     stages {
