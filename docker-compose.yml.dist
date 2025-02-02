@@ -1,5 +1,5 @@
 services:
-  discord-bot-manager:
+  nats-to-http:
     image: %ECR_REPO%/atomy/nats-to-http:latest
     environment:
       - FORWARD_HTTP_URL=%FORWARD_HTTP_URL%
