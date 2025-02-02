@@ -78,11 +78,11 @@ pipeline {
     }
 
     post {
-        always {
+        failure {
             withCredentials([string(credentialsId: 'discord-webhook-release-url', variable: 'DISCORD_WEBHOOK_URL')]) {
-                echo 'Sending release-notification...'
+                echo 'Sending ERROR release-notification...'
                 sh './scripts/notification.sh ERROR'
-                echo 'Sending release-notification...DONE'
+                echo 'Sending ERROR release-notification...DONE'
             }
         }
     }
