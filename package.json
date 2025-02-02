@@ -1,0 +1,16 @@
+{
+  "name": "nats-http-relay",
+  "version": "1.0.0",
+  "description": "A simple NATS to HTTP relay service.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Marcel Lamm <atomy@jackinpoint.net>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.5.0",
+    "nats": "^2.12.0"
+  }
+}
+

@@ -1,0 +1,8 @@
+services:
+  discord-bot-manager:
+    image: %ECR_REPO%/atomy/discord-bot_manager:latest
+    environment:
+      - FORWARD_HTTP_URL=%FORWARD_HTTP_URL%
+      - NATS_SERVER=%NATS_SERVER%
+      - NATS_TOPIC=%NATS_TOPIC%
+    restart: unless-stopped

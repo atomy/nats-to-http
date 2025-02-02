@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+docker push %ECR_REPO%/atomy/discord-bot_manager:latest
