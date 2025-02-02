@@ -19,6 +19,8 @@ pipeline {
                 timeout(unit: 'SECONDS', time: 300) {
                     withCredentials([string(credentialsId: 'ecr-prefix', variable: 'ECR_PREFIX'),
                         string(credentialsId: 'discord-webhook-release-url', variable: 'DISCORD_WEBHOOK_URL'),
+                        string(credentialsId: 'nats-server', variable: 'NATS_SERVER'),
+                        string(credentialsId: 'nats-to-http-nats-topic', variable: 'NATS_TOPIC'),
                         string(credentialsId: 'nats-to-http-deploy-host', variable: 'DEPLOY_FULLPATH'),
                         string(credentialsId: 'docker-deploy-login', variable: 'DEPLOY_LOGIN'),]) {
                             echo 'Configuring...'
