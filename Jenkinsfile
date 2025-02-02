@@ -20,7 +20,7 @@ pipeline {
                         string(credentialsId: 'nats-to-http-deploy-host', variable: 'DEPLOY_FULLPATH'),
                         string(credentialsId: 'docker-deploy-login', variable: 'DEPLOY_LOGIN'),]) {
                             echo 'Configuring...'
-                            sh './scripts/configure.sh'
+                            sh './configure.sh'
                             echo 'Configuring...DONE'
                     }
 
