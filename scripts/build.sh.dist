@@ -2,12 +2,6 @@
 
 set -euo pipefail
 
-# Add this at the top of your script for debugging
-echo "Docker binary path: $(which docker)"
-echo "Docker version: $(docker --version)"
-echo "Current user: $(whoami)"
-echo "Shell environment: $SHELL"
-
 # Create and use a new Docker Buildx builder (if not already created)
 if ! docker buildx inspect mybuilder > /dev/null 2>&1; then
     docker buildx create --name mybuilder --use
@@ -23,4 +17,3 @@ docker buildx build \
     --tag atomy/nats-to-http:latest \
     --tag "${ECR_REPO}/atomy/nats-to-http:latest" \
     .
-
